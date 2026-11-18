@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mqtt-broker
+  namespace: agrosugar
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: mqtt-broker
+  template:
+    metadata:
+      labels:
+        app: mqtt-broker
+    spec:
+      containers:
+        - name: broker
+          image: emqx/nanomq:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: NANOMQ_ALLOW_ANONYMOUS
+              value: "true"
+          ports:
+            - name: mqtt
+              containerPort: 1883
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 25m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mqtt-broker
+  namespace: agrosugar
+spec:
+  type: ClusterIP
+  selector:
+    app: mqtt-broker
+  ports:
+    - name: mqtt
+      port: 1883
+      targetPort: 1883
+      protocol: TCP

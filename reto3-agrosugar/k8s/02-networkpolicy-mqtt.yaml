@@ -1,0 +1,20 @@
+
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: permitir-solo-sensor-autorizado
+  namespace: agrosugar
+spec:
+  podSelector:
+    matchLabels:
+      app: mqtt-broker
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              rol: sensor-autorizado
+      ports:
+        - protocol: TCP
+          port: 1883

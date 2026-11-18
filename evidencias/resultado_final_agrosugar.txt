@@ -1,0 +1,23 @@
+NAME                              READY   STATUS    RESTARTS   AGE
+pod/mqtt-broker-64b989b45-lmzd9   1/1     Running   0          14m
+pod/sensor-autorizado             1/1     Running   0          61m
+pod/sensor-intruso                1/1     Running   0          61m
+
+NAME                  TYPE        CLUSTER-IP     EXTERNAL-IP   PORT(S)    AGE
+service/mqtt-broker   ClusterIP   10.96.161.77   <none>        1883/TCP   106m
+
+NAME                                                              POD-SELECTOR      AGE
+networkpolicy.networking.k8s.io/permitir-solo-sensor-autorizado   app=mqtt-broker   9m12s
+Name:         permitir-solo-sensor-autorizado
+Namespace:    agrosugar
+Created on:   2026-11-18 21:26:31 +0000 UTC
+Labels:       <none>
+Annotations:  <none>
+Spec:
+  PodSelector:     app=mqtt-broker
+  Allowing ingress traffic:
+    To Port: 1883/TCP
+    From:
+      PodSelector: rol=sensor-autorizado
+  Not affecting egress traffic
+  Policy Types: Ingress

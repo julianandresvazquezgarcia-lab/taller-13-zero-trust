@@ -1,0 +1,67 @@
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mqtt-config
+  namespace: agrosugar
+data:
+  mosquitto.conf: |
+    listener 1883 0.0.0.0
+    allow_anonymous true
+    persistence false
+    log_dest stdout
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mqtt-broker
+  namespace: agrosugar
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mqtt-broker
+  template:
+    metadata:
+      labels:
+        app: mqtt-broker
+    spec:
+      containers:
+        - name: mosquitto
+          image: eclipse-mosquitto:2.0.22
+          command:
+            - /bin/sh
+            - -c
+          args:
+            - |
+              cp /etc/mqtt-settings/mosquitto.conf /tmp/mosquitto.conf
+              chmod 644 /tmp/mosquitto.conf
+              exec /usr/sbin/mosquitto -c /tmp/mosquitto.conf -v
+          ports:
+            - containerPort: 1883
+              name: mqtt
+          volumeMounts:
+            - name: mqtt-config
+              mountPath: /etc/mqtt-settings
+              readOnly: true
+      volumes:
+        - name: mqtt-config
+          configMap:
+            name: mqtt-config
+            defaultMode: 0644
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mqtt-broker
+  namespace: agrosugar
+spec:
+  type: ClusterIP
+  selector:
+    app: mqtt-broker
+  ports:
+    - name: mqtt
+      port: 1883
+      targetPort: 1883
+      protocol: TCP
+
