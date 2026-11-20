@@ -1,0 +1,16 @@
+AUDITORIA DE SEGURIDAD - TALLER 13
+Verificacion de SealedSecret:
+3:kind: SealedSecret
+8:  encryptedData:
+
+Verificacion de archivos privados registrados en Git:
+OK: no se encontraron llaves ni imagenes de discos
+
+Resultado de Gitleaks:
+Commits analizados: 2
+Hallazgos: 1
+Archivo: reto2-hospitvalle/k8s/01-sealed-pg-uci-cred.yaml
+Observacion: El hallazgo corresponde a un valor ubicado
+en encryptedData dentro de un recurso SealedSecret.
+Se considera un posible falso positivo pendiente
+de validacion final.
