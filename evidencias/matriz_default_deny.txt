@@ -1,0 +1,4 @@
+sensor-autorizado -> mqtt-broker:1883 NO CONECTA
+sensor-autorizado -> db-transaccional:5432 NO CONECTA
+sensor-intruso -> mqtt-broker:1883 NO CONECTA
+sensor-intruso -> db-transaccional:5432 NO CONECTA

@@ -1,0 +1,5 @@
+pod/sensor-intruso labeled
+SUPLANTACION: CONEXION CONSEGUIDA
+pod/sensor-intruso labeled
+NAME             READY   STATUS    RESTARTS   AGE   LABELS
+sensor-intruso   1/1     Running   0          46h   rol=intruso
