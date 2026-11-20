@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-sensors-egress-mqtt
+  namespace: agrosugar
+spec:
+  podSelector:
+    matchLabels:
+      rol: sensor-autorizado
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - podSelector:
+            matchLabels:
+              app: mqtt-broker
+      ports:
+        - protocol: TCP
+          port: 1883

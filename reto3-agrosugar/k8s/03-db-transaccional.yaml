@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: db-transaccional
+  namespace: agrosugar
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: db-transaccional
+  template:
+    metadata:
+      labels:
+        app: db-transaccional
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:16-alpine
+          ports:
+            - containerPort: 5432
+          envFrom:
+            - secretRef:
+                name: db-cred
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-transaccional
+  namespace: agrosugar
+spec:
+  selector:
+    app: db-transaccional
+  ports:
+    - port: 5432
+      targetPort: 5432
+      protocol: TCP
